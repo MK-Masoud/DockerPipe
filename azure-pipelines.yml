@@ -57,8 +57,7 @@ stages:
         command: 'Push an image'
         imageName: '$(containerName):$(Build.BuildId)'
 
-      
-- stage: Deploy
+#- stage: Deploy
   displayName: Deploy Job attempt
   jobs:
   - job: Deploy
