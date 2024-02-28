@@ -56,31 +56,3 @@ stages:
         azureContainerRegistry: '$(acrHostName)'
         command: 'Push an image'
         imageName: '$(imageName):$(Build.BuildId)'
-- stage: Deploy
-  displayName: Deploy Job attempt
-  jobs:
-  - job: Deploy
-    displayName: Deploy
-    steps:
-
-    - task: AzureResourceGroupDeployment@2
-      displayName: 'Azure Deployment:Create Azure App Service'
-      inputs:
-        azureSubscription: 'azureSrvcConn'
-        resourceGroupName: '$(rgName)'
-        location: '$(location)'
-        csmFile: '$(Pipeline.Workspace)/**/app-svc-temp.json'
-        overrideParameters: '-appName $(appName) -appSvcPlanName $(appName) -appInsightsLocation "$(location)" -appSku "S1 Standard" -acrName $(acrName) -acrLocation "$(location)" -acrSku standard -containerName $(containerName):$(Build.BuildId)'
-    - task: AzureRmWebAppDeployment@3
-      inputs:
-        azureSubscription: 'azureSrvcConn'
-        appType: 'applinux'
-        WebAppName: '$(appName)'
-        DockerNamespace: '$(acrHostName)'
-        DockerRepository: '$(containerName)'
-        DockerImageTag: '$(Build.BuildId)'
-        WebAppUri: webAppUrl
-        TakeAppOfflineFlag: true
-        UseWebDeploy: true
-        RenameFilesFlag: true
-
